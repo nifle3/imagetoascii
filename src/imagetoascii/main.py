@@ -48,9 +48,11 @@ def get_scale_size(width: int, heigth: int) -> tuple[int]:
 
 
 if __name__ == "__main__":
-    option = optparse.OptionParser()
-    option.add_option('--url', '-u', help='Set url, that download image (network requirement)',)
-    option.add_option('--width', '-w', help='Set width of final picture')
-    option.add_option('--heigth', '-h', help='Set heigth of final picture')
-    option.add_option('--scaling', '-s', help='Set scaling of sizing picture (overwrite with -w and -h)')
+    parser_opts = optparse.OptionParser()
+    parser_opts.add_option('--url', '-U', help='Set url, that download image (network requirement)',)
+    parser_opts.add_option('--width', '-W', help='Set width of final picture')
+    parser_opts.add_option('--heigth', '-H', help='Set heigth of final picture')
+    parser_opts.add_option('--scaling', '-S', help='Set scaling of sizing picture (overwrite with -w and -h)')
+
+    (option, args) = parser_opts.parse_args()
     #main()
