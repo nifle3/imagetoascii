@@ -1,40 +1,44 @@
 from typing import NoReturn
-from os import path
 import sys
-import optparse
 
-from PIL import Image
-import numpy as np
+from ascii_converter_builder import ASCIIConverterBuilder
+from cli import CLI
+
+"""
+#def main() -> NoReturn:
+    with Image.open(file_path)as image:
+        
+"""
 
 def main() -> NoReturn:
-    args = sys.argv
-    if len(args) < 2:
-        print_error('Enter a path to image')
+    cli = CLI()
+
+    try:
+        cli.parse()
+        image_place = cli.image_path
+        option = cli.option
+
+        builder = ASCIIConverterBuilder()
+        if option.url:
+            builder.set_image_url(image_place)
+        else:
+            builder.set_image_path(image_place)
+
+        if option.width is not None:
+            builder.set_width(option.width)
+        
+        if option.heigth is not None:
+            builder.set_heigth(option.heigth)
+
+        if option.scaling is not None:
+            builder.set_scaling(option.scaling)
+
+        with builder.build() as converter:
+            converter.convert()
+
+    except Exception as e:
+        print_error(e)
         sys.exit(1)
-
-    file_path = args[1]
-    if not path.exists(file_path):
-        print_error('Enter a valid file path')
-        sys.exit(1)
-
-    with Image.open(file_path)as image:
-        image = image.convert('L')
-        width, heigth = image.size
-        image = image.resize(get_scale_size(width, heigth))
-
-        image_array = np.array(image)
-
-        black = np.quantile(image_array, 1/3)
-
-        for row in image_array:
-            for pixel in row:
-                char = ' '
-                if pixel > black:
-                    char = '#'
-
-                print(char, end='')
-
-            print('')
 
 
 def print_error(*args):
@@ -48,11 +52,4 @@ def get_scale_size(width: int, heigth: int) -> tuple[int]:
 
 
 if __name__ == "__main__":
-    parser_opts = optparse.OptionParser()
-    parser_opts.add_option('--url', '-U', help='Set url, that download image (network requirement)',)
-    parser_opts.add_option('--width', '-W', help='Set width of final picture')
-    parser_opts.add_option('--heigth', '-H', help='Set heigth of final picture')
-    parser_opts.add_option('--scaling', '-S', help='Set scaling of sizing picture (overwrite with -w and -h)')
-
-    (option, args) = parser_opts.parse_args()
-    #main()
+    main()

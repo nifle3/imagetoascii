@@ -1,6 +1,7 @@
 from typing import Final
 import re
 import requests
+from os import path
 from io import BytesIO
 
 
@@ -22,11 +23,14 @@ class ASCIIConverterBuilder:
         self.heigth = None
         self.scaling = 30
 
-    def set_image_path(self, image: str):
+    def set_image_path(self, image_path: str):
         if self.image_url is not None:
             raise InvalidState('You already set an image url')
 
-        self.image_path = image
+        if not path.exists(image_path):
+            raise ValueError('Enter a valid file path')
+
+        self.image_path = image_path
         return self
 
     def set_image_url(self, url: str):
@@ -39,22 +43,31 @@ class ASCIIConverterBuilder:
         self.image_url = url
         return self
 
-    def set_width(self, width: int):
-        if width < 0:
+    def set_width(self, width: str):
+        if not width.isdigit():
+            raise ValueError('Width must be int')
+
+        if int(width) < 0:
             raise ValueError('Width must be greater than zero')
 
         self.width = int(width)
         return self
 
-    def set_heigth(self, heigth: int):
-        if heigth < 0:
+    def set_heigth(self, heigth: str):
+        if not heigth.isdigit():
+            raise ValueError('Heigth must be int')
+
+        if int(heigth) < 0:
             raise ValueError('Heigth must be greater than zero')
 
         self.heigth = int(heigth)
         return self
 
-    def set_scaling(self, scale: int):
-        if scale < 0:
+    def set_scaling(self, scale: str):
+        if not scale.isdigit():
+            raise ValueError('Scale must be int')
+
+        if int(scale) < 0:
             raise ValueError('Scaling must be greater than zero')
         
         self.scaling = int(scale)
