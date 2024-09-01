@@ -9,7 +9,7 @@ class CLI:
 
         self.parser = OptionParser()
         self.parser.add_option('--url', '-U', help='Set that path is url, that download image (network requirement)', 
-            default=False,  action = "store_false")
+            default=False,  action = 'store_true')
         self.parser.add_option('--width', '-W', help='Set width of final picture')
         self.parser.add_option('--heigth', '-H', help='Set heigth of final picture')
         self.parser.add_option('--scaling', '-S', help='Set scaling of sizing picture (overwrite with -w and -h)')

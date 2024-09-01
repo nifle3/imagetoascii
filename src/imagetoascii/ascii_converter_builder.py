@@ -14,7 +14,13 @@ from ascii_converter import ASCIIConverter, ASCIIBasicConverter
 class ASCIIConverterBuilder:
     __slots__ = ('image_path', 'image_url', 'width', 'heigth', 'scaling')
 
-    URL_PATTERN: Final[str] = '^[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$'
+    URL_PATTERN: Final[re.Pattern] =  re.compile(
+        r'^(?:http|ftp)s?://'  # http:// или https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # домен
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...или IP
+        r'(?::\d+)?'  # опциональный порт
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE )
     
     def __init__(self):
         self.image_path = None
@@ -37,8 +43,8 @@ class ASCIIConverterBuilder:
         if self.image_path is not None:
             raise InvalidState('You already set an image path')
 
-        if not re.match(url, self.URL_PATTERN):
-            raise ValueError('You enter an invalid url')
+        if not self.URL_PATTERN.match(url):
+            raise ValueError('Enter a valid image url')
 
         self.image_url = url
         return self
