@@ -1,3 +1,4 @@
+#include <time.h>
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -14,7 +15,13 @@ typedef struct {
     int bmp_color_count;
 } ImageObject;
 
+PyObject* hello_world(PyObject *self) {
+    return PyUnicode_FromString("hello world");
+}
+
 static PyMethodDef MyMethdos[] = {
+    {"hello_world", (PyCFunction)hello_world, METH_NOARGS},
+    {NULL, NULL},
 };
 
 static struct PyModuleDef image_module = {
@@ -25,6 +32,6 @@ static struct PyModuleDef image_module = {
     .m_size = -1,
 };
 
-PyMODINIT_FUNC PyInit_image(void) { 
+PyMODINIT_FUNC PyInit__image(void) { 
     return PyModule_Create(&image_module);
 }

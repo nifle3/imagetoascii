@@ -4,12 +4,6 @@ import sys
 from ascii_converter_builder import ASCIIConverterBuilder
 from cli import CLI
 
-"""
-#def main() -> NoReturn:
-    with Image.open(file_path)as image:
-        
-"""
-
 def main() -> NoReturn:
     cli = CLI()
 
@@ -52,4 +46,6 @@ def get_scale_size(width: int, heigth: int) -> tuple[int]:
 
 
 if __name__ == "__main__":
-    main()
+    import _image
+    print(_image.hello_world())
+    # main()
